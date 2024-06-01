@@ -1,0 +1,22 @@
+----------------------------------------------------------------------------------------------
+Azure Firewall停止コマンド
+
+# Stop the firewall
+
+$ResourceGroupName = "test-vm1"
+$AzureFirewallName = "test-vm1-firewall1"
+$azfw = Get-AzFirewall -Name $AzureFirewallName -ResourceGroupName $ResourceGroupName
+$azfw.Deallocate()
+Set-AzFirewall -AzureFirewall $azfw
+
+----------------------------------------------------------------------------------------------
+Azure Firewall起動コマンド
+
+# Start the firewall
+
+$azfw = Get-AzFirewall -Name "test-vm1-firewall1" -ResourceGroupName "test-vm1"
+$vnet = Get-AzVirtualNetwork -ResourceGroupName "test-vm1" -Name "firewall-network1"
+$pip= Get-AzPublicIpAddress -ResourceGroupName "test-vm1" -Name "firewall-ip1"
+$mgmtPip2 = Get-AzPublicIpAddress -ResourceGroupName "test-vm1" -Name "firewall-manageIP1"
+$azfw.Allocate($vnet, $pip, $mgmtPip2)
+$azfw | Set-AzFirewall
